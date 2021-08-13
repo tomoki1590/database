@@ -60,7 +60,7 @@ class _TestScreenState extends State<TestScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          "残り問題数",
+          "残り問題数!!",
           style: TextStyle(fontSize: 14.0),
         ),
         SizedBox(
