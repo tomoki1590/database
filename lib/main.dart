@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: "単語帳",
       theme: ThemeData(
         brightness: Brightness.dark,
-        fontFamily: ("lanobe"),
+        fontFamily: ("lanobejjj"),
 
       ),
       home: HomeScreen(),
