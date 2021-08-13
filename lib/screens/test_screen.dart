@@ -106,7 +106,7 @@ class _TestScreenState extends State<TestScreen> {
   Widget _isMemorizedCheck() {
     return CheckboxListTile(
         title: Text(
-          "暗記済みの場合はチェックを入れてくださいjjjjjjjj",
+          "暗記済みの場合はチェックを入れてください",
           style: TextStyle(fontSize: 15.0),
         ),
         value: _isMemorized,
