@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:my_datebase/db/database.dart';
 import 'package:my_datebase/main.dart';
@@ -6,18 +5,19 @@ import 'package:my_datebase/screens/wordlist_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sqlite3/src/api/exception.dart';
 
-enum EditStatus {ADD,EDIT}
+enum EditStatus { ADD, EDIT }
 
 class EditScreen extends StatefulWidget {
   final EditStatus status;
 
   final Word? word;
 
-  EditScreen ({required this.status,this.word});
+  EditScreen({required this.status, this.word});
 
   @override
   _EditScreenState createState() => _EditScreenState();
 }
+
 class _EditScreenState extends State<EditScreen> {
   TextEditingController questionInputPart = TextEditingController();
   TextEditingController answerInputPart = TextEditingController();
@@ -32,15 +32,15 @@ class _EditScreenState extends State<EditScreen> {
     if (widget.status == EditStatus.ADD) {
       _isQuestionEnabled = true;
       _titleText = "新しい単語の追加";
-      questionInputPart.text == "";
-      answerInputPart.text == "";
+      questionInputPart.text = "";
+      answerInputPart.text = "";
     } else
       _isQuestionEnabled = false;
     _titleText = "単語の修正";
+    BuildOwner();
     questionInputPart.text = widget.word!.strQuestion;
     answerInputPart.text = widget.word!.strAnswer;
   }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -128,6 +128,7 @@ class _EditScreenState extends State<EditScreen> {
         context, MaterialPageRoute(builder: (context) => WordListScreen()));
     return Future.value(false);
   }
+
   _onWordResisterd() {
     if (widget.status == EditStatus.ADD) {
       _insertWord();
@@ -135,6 +136,7 @@ class _EditScreenState extends State<EditScreen> {
       _updateWord();
     }
   }
+
   _insertWord() async {
     if (questionInputPart.text == "" || answerInputPart.text == "") {
       Fluttertoast.showToast(
@@ -144,28 +146,49 @@ class _EditScreenState extends State<EditScreen> {
       );
       return;
     }
-    var word = Word(
-        strQuestion: questionInputPart.text, strAnswer: answerInputPart.text,isMemorized: false);
-
-    try {
-      await database.addWord(word);
-      print("ok");
-      questionInputPart.clear();
-      answerInputPart.clear();
 
 
-      Fluttertoast.showToast(
-          msg: "登録完了",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER_LEFT
-      );
-    } on SqliteException catch (e) {
-      Fluttertoast.showToast(msg: "登録されてるよー");
-    }
+    showDialog(context: context, builder: (_) =>
+        AlertDialog(
+          title: Text("登録"),
+          content: Text("登録していいですか"),
+          actions: [
+            TextButton(
+                child: Text("はい"),
+                onPressed: () async {
+                  var word = Word(
+                      strQuestion: questionInputPart.text,
+                      strAnswer: answerInputPart.text,
+                      isMemorized: false);
+
+                  try {
+                    await database.addWord(word);
+                    print("ok");
+                    questionInputPart.clear();
+                    answerInputPart.clear();
+                    Fluttertoast.showToast(
+                        msg: "登録完了",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER_LEFT
+                    );
+                  } on SqliteException catch (e) {
+                    Fluttertoast.showToast(msg: "登録されてるよー");
+                  } finally {
+                    Navigator.pop(context);
+                  }
+                }
+
+            ),
+
+            TextButton(
+              child: Text("いいえ"), onPressed: () => Navigator.pop(context),
+
+            )
+          ],
+        ));
   }
 
-
-  void _updateWord() async{
+  void _updateWord() async {
     if (questionInputPart.text == "" || answerInputPart.text == "") {
       Fluttertoast.showToast(
         msg: "両方入れないと無理〜",
@@ -173,18 +196,35 @@ class _EditScreenState extends State<EditScreen> {
         gravity: ToastGravity.TOP,
       );
       return;
-
+    }
+    showDialog(context: context, builder: (_)
+    =>
+        AlertDialog(
+          title: Text("${questionInputPart.text}の変更"),
+          content: Text("変更してもいいですか"),
+          actions:<Widget> [
+            TextButton(child: Text("はい"),onPressed:()async {
+              var word = Word(
+                  strQuestion: questionInputPart.text,
+                  strAnswer: answerInputPart.text,
+                  isMemorized: false);
+              try {
+                await database.updateWord(word);
+                _backToWordlist(context);
+                Fluttertoast.showToast(msg: "変更完了しました");
+              } on SqliteException catch (e) {
+                Fluttertoast.showToast(
+                    msg: "エラーにより処理不能", toastLength: Toast.LENGTH_SHORT);
+              }finally {
+              }Navigator.pop(context);
+            },
+            ),
+            TextButton(onPressed:()=> Navigator.pop(context), child: Text("いいえ")
+            ),
+          ],
+        ),
+    );
   }
-    var word = Word(
-        strQuestion: questionInputPart.text, strAnswer: answerInputPart.text,isMemorized: false);
-try{
-   await database.updateWord(word);
-   _backToWordlist(context);
-   Fluttertoast.showToast(msg: "変更完了しました");
-}on SqliteException catch(e) {
-  Fluttertoast.showToast(msg: "エラーにより処理不能", toastLength: Toast.LENGTH_SHORT);
-  return;
-}
-}
+
   }
 

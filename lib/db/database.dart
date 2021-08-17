@@ -8,13 +8,12 @@ import 'package:path_provider/path_provider.dart';
 
 part 'database.g.dart';
 
-
 class Words extends Table {
   TextColumn get strQuestion => text()();
 
   TextColumn get strAnswer => text()();
 
-  BoolColumn get isMemorized =>boolean().withDefault(Constant(false))();
+  BoolColumn get isMemorized => boolean().withDefault(Constant(false))();
 
   @override
   Set<Column> get primaryKey => {strQuestion};
@@ -33,34 +32,41 @@ LazyDatabase _openConnection() {
 
 @UseMoor(tables: [Words])
 class MyDatabase extends _$MyDatabase {
-  MyDatabase() :super (_openConnection());
+  MyDatabase() : super(_openConnection());
 
   @override
   int get schemaVersion => 2;
 
 //統合処理
-  MigrationStrategy get migration => MigrationStrategy(
-  onCreate: (Migrator m) {
-  return m.createAll();
-  },
-  onUpgrade: (Migrator m, int from, int to) async {
-    if (from == 1) {
-      // we added the dueDate property in the change from version 1
-      await m.addColumn(words, words.isMemorized);
-    }
-  }
-  );
+  MigrationStrategy get migration =>
+      MigrationStrategy(
+          onCreate: (Migrator m) {
+        return m.createAll();
+      },
+          onUpgrade: (Migrator m, int from, int to) async {
+        if (from == 1) {
+          await m.addColumn(words, words.isMemorized);
+        }
+      });
+
   //create
   Future addWord(Word word) => into(words).insert(word);
 
   //read
-  Future <List<Word>> get allWords => select(words).get();
+  Future<List<Word>> get allWords => select(words).get();
+
+  //read(暗記済の単語除外)
+  Future<List<Word>> get allWordsUnderstanded =>
+      (select(words)..where((t) => t.isMemorized.equals(false))).get();
+//read (暗記済が下になるようにsort)
+  Future<List<Word>> get allWordSorted =>
+      (select(words)..orderBy([(table)=>OrderingTerm(expression:table.isMemorized)])).get();
 
 //Update
   Future updateWord(Word word) => update(words).replace(word);
 
 //Delete
   Future deleteWord(Word word) =>
-      (delete(words)
-        ..where((t) => t.strQuestion.equals(word.strQuestion))).go();
+      (delete(words)..where((t) => t.strQuestion.equals(word.strQuestion)))
+          .go();
 }

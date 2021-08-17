@@ -24,6 +24,13 @@ class _WordListScreenState extends State<WordListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("一覧画面"),
+        centerTitle: true,
+        actions:<Widget> [
+          IconButton(
+      icon: Icon(Icons.sort),tooltip: "暗記済が下にくるように並び替え",
+              onPressed:() => _sortWords() ,
+    )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _addNewWord(context),
@@ -66,6 +73,9 @@ class _WordListScreenState extends State<WordListScreen> {
         title: Text("${_wordList[position].strQuestion}"),
         subtitle: Text("${_wordList[position].strAnswer}",
             style: TextStyle(fontFamily: "rough")),
+        trailing: (_wordList[position].isMemorized)
+            ? Icon(Icons.check)
+            : null,
         onTap: () => _editWord(_wordList[position]),
         onLongPress: () => _deleteWord(_wordList[position]),
       ),
@@ -87,5 +97,12 @@ class _WordListScreenState extends State<WordListScreen> {
         MaterialPageRoute(
             builder: (context) =>
                 EditScreen(status: EditStatus.EDIT, word: selectedWord)));
+  }
+
+  _sortWords() async{
+_wordList = await database.allWordSorted;
+setState(() {
+
+});
   }
 }

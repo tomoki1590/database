@@ -15,9 +15,9 @@ bool isIncludeMemorizedWord = false;
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
           children: <Widget>[
             Expanded(child: Image.asset("assets/images/image_title.png")),
             _titleText(),
