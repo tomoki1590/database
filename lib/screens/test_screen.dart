@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_datebase/db/database.dart';
 import 'package:my_datebase/main.dart';
+import 'package:flutter/cupertino.dart';
 
 enum TestStatus { BEFORE_START, SHOW_QUESTION, SHOW_ANSWER, FINISHED }
 
@@ -18,14 +19,15 @@ class _TestScreenState extends State<TestScreen> {
   String _txtQuestion = "テスト";
   String _txtAnswer = "解答";
   bool _isMemorized = false;
+
   bool _isQuestionCardVisible = false;
   bool _isAnswerCardVisible = false;
   bool _isCheckboxVisible = false;
   bool _isFabVisible = false;
   List<Word> _testWordList = [];
 
-  late TestStatus _testStatus = TestStatus.BEFORE_START;
-  int _index = 0;
+  TestStatus _testStatus = TestStatus.BEFORE_START;
+  int _index = 0;//今何問目
   late Word _currentWord;
 
   @override
@@ -86,7 +88,7 @@ class _TestScreenState extends State<TestScreen> {
         Text(
           _numberOfQuestion.toString(),
           style: TextStyle(fontSize: 14.0),
-        )
+        ),
       ],
     );
   }
@@ -152,6 +154,7 @@ class _TestScreenState extends State<TestScreen> {
     }
     _testWordList.shuffle();
     _testStatus = TestStatus.BEFORE_START;
+    _index =0;
     print(_testWordList.toString());
 
     setState(() {
@@ -180,9 +183,9 @@ class _TestScreenState extends State<TestScreen> {
             _isFabVisible=false;
             _testStatus = TestStatus.FINISHED;
           });
-
         } else {
           _testStatus = TestStatus.SHOW_QUESTION;
+          _showQuestion();
         }
         break;
       case TestStatus.FINISHED:

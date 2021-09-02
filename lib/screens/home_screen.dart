@@ -37,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             //Todo　ラジオボタン,
-            _radioButton(),
+            //_radioButton(),
+            Widget_switch(),
             //　単語一覧ボタン,
             ButtonWithIcon(
                 onPressed: () => _startWordListScreen(context),
@@ -114,5 +115,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _StartTestScreen(BuildContext context) {
     return Navigator.push(context, MaterialPageRoute(builder: (context) =>TestScreen(isIncludeMemorizedWord: isIncludeMemorizedWord,)));
+  }
+
+  Widget_switch() {
+    return SwitchListTile(
+      title: Text("暗記済の単語を含む"),
+      value: isIncludeMemorizedWord,
+      onChanged: (value){
+        setState(() {
+          isIncludeMemorizedWord =value;
+        });
+      }
+
+    );
   }
 }
