@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_datebase/db/database.dart';
-import 'package:my_datebase/screens/home_screen.dart';
+
+import 'screens/home_screen.dart';
 
  late MyDatabase database;
 
