@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ButtonWithIcon(
               onPressed: () => _StartTestScreen(context),
               icon: Icon(Icons.play_arrow),
-              label: ("テストをする"),
+              label: ("テストをするyo-"),
               color: Colors.red,
             ),
 
