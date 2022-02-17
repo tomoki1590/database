@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ButtonWithIcon(
               onPressed: () => _StartTestScreen(context),
               icon: Icon(Icons.play_arrow),
-              label: ("テストをするyo-"),
+              label: ("テストをする"),
               color: Colors.red,
             ),
 
@@ -114,19 +114,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _StartTestScreen(BuildContext context) {
-    return Navigator.push(context, MaterialPageRoute(builder: (context) =>TestScreen(isIncludeMemorizedWord: isIncludeMemorizedWord,)));
+    return Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TestScreen(
+                  isIncludeMemorizedWord: isIncludeMemorizedWord,
+                )));
   }
 
   Widget_switch() {
     return SwitchListTile(
-      title: Text("暗記済の単語を含む"),
-      value: isIncludeMemorizedWord,
-      onChanged: (value){
-        setState(() {
-          isIncludeMemorizedWord =value;
+        title: Text("暗記済の単語を含む"),
+        value: isIncludeMemorizedWord,
+        onChanged: (value) {
+          setState(() {
+            isIncludeMemorizedWord = value;
+          });
         });
-      }
-
-    );
   }
 }
