@@ -1,7 +1,7 @@
 # my_datebase
 
 A new Flutter project.
-https://user-images.githubusercontent.com/88073963/154418640-6ebce6fe-438c-43d1-91d6-09e709c2c069.gif![ezgif com-gif-maker](https://user-images.githubusercontent.com/88073963/154418981-a3dbe0ad-531c-4b16-9501-7705c46fdbef.gif)
+https://github.com/tomoki1590/database/issues/1
 
 ## Getting Started
 
