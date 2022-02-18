@@ -1,10 +1,9 @@
 # my_datebase
 
 A new Flutter project.
+
 ![yes](https://user-images.githubusercontent.com/ezgif.com-gif-maker.gif)
 
-![Uploading ezgif.com-gif-maker.gif…]()
-https://github.com/tomoki1590/database/issues/1
 
 ## Getting Started
 
